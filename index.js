@@ -3,7 +3,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const queue = require('./queue');
+const Queue = require('./queue');
 
 const { PORT, CLIENT_ORIGIN } = require('./config');
 // const { dbConnect } = require('./db-mongoose');
@@ -11,7 +11,12 @@ const { PORT, CLIENT_ORIGIN } = require('./config');
 
 const app = express();
 
-const dog = [
+const cat = new Queue();
+const dog = new Queue();
+
+
+
+const dogArr = [
   {
     imageURL: 'http://www.dogster.com/wp-content/uploads/2015/05/Cute%20dog%20listening%20to%20music%201_1.jpg',
     imageDescription: 'A smiling golden-brown golden retreiver listening to music.',
@@ -50,7 +55,7 @@ const dog = [
   }
 ];
 
-const cat = [
+const catArr = [
   {
     imageURL:'https://images.pexels.com/photos/326875/pexels-photo-326875.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=350',
     imageDescription: 'Siamese cat sitting on porch table.',
@@ -89,6 +94,13 @@ const cat = [
   }
 ];
 
+catArr.forEach(pet => cat.enqueue(pet));
+dogArr.forEach(pet => dog.enqueue(pet));
+
+console.log(cat.peek());
+console.log(dog.peek());
+
+
 app.use(
   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
     skip: (req, res) => process.env.NODE_ENV === 'test'
@@ -108,20 +120,20 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/cat', (req, res) => {
-  res.json(cat);
+  res.json(cat.peek());
 })
 
 app.get('/api/dog', (req, res) => {
-  res.json(dog);
+  res.json(dog.peek());
 })
 
 app.delete('/api/dog', (req,res) => {
-  dog.shift();
+  dog.dequeue();
   res.sendStatus(204);
 })
 
 app.delete('/api/cat', (req,res) => {
-  cat.shift();
+  cat.dequeue();
   res.sendStatus(204);
 })
 

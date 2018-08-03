@@ -42,13 +42,15 @@ class Queue {
     return node;
   }
 
+  peek() {
+    if(this.first === null) {
+      return 'Queue is empty';
+    }
+    return this.first.value;
+  }
+
 }
 
-const peek = queue => {
-  if(queue.first === null) {
-    return 'Queue is empty';
-  }
-  return queue.first.value;
-};
+
 
 module.exports = Queue;
