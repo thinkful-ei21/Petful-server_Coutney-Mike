@@ -3,6 +3,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const queue = require('./queue');
 
 const { PORT, CLIENT_ORIGIN } = require('./config');
 // const { dbConnect } = require('./db-mongoose');
@@ -112,6 +113,14 @@ app.get('/api/cat', (req, res) => {
 
 app.get('/api/dog', (req, res) => {
   res.json(dog);
+})
+
+app.delete('/api/dog', (req,res, dog) => {
+  dog.unshift();
+})
+
+app.delete('/api/cat', (req,res, cat) => {
+  cat.unshift();
 })
 
 function runServer(port = PORT) {
