@@ -74,7 +74,7 @@ const cat = [
     imageDescription: 'Bashful Calico kitten hanging out outside.',
     name: 'Spot',
     sex: 'Female',
-    age: <1,
+    age: 1,
     breed: 'Calico',
     story: 'Abandoned'
   },
@@ -115,12 +115,14 @@ app.get('/api/dog', (req, res) => {
   res.json(dog);
 })
 
-app.delete('/api/dog', (req,res, dog) => {
-  dog.unshift();
+app.delete('/api/dog', (req,res) => {
+  dog.shift();
+  res.sendStatus(204);
 })
 
-app.delete('/api/cat', (req,res, cat) => {
-  cat.unshift();
+app.delete('/api/cat', (req,res) => {
+  cat.shift();
+  res.sendStatus(204);
 })
 
 function runServer(port = PORT) {
